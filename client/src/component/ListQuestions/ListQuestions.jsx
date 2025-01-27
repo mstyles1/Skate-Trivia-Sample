@@ -44,10 +44,6 @@ export default function ListQuestions({user}) {
     fetchQuestion()
   },[])
 
-  useEffect (()=>{
-    fetchAnswer()
-  },[])
-
   return (
     <>
       { questions.map ((question, index)=> {
@@ -71,7 +67,7 @@ export default function ListQuestions({user}) {
 
             <div style={{"backgroundColor": "#ffffff", "padding": "20px"}}>
               <h4>{question.question_year}</h4>
-              <Form.Control type="text" placeholder="Question Answer" onChange={handleAnswerChange} />
+              <Form.Control type="text" placeholder="Question Answer" onChange={fetchAnswer} />
               <Button variant="warning" onClick={(event)=>handleSubmit(event, question.question_id)}>Submit</Button>
             </div>
           </div>                   

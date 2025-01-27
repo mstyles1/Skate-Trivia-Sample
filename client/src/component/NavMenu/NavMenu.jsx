@@ -7,13 +7,13 @@ export default function NavMenu({user}) {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#home">Home</Navbar.Brand>
+        <Navbar.Brand href="/login">The Skater of the Year Quiz</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             
-            <Nav.Link href="/login">Login</Nav.Link>
-            <Nav.Link href="/signup">Sign up</Nav.Link>
+            <Nav.Link href="/">Login</Nav.Link>
+            <Nav.Link href="/signup">Signup</Nav.Link>
             <Nav.Link href="/questions">Quiz</Nav.Link>
             
           </Nav>

@@ -4,7 +4,6 @@ import db from '../dbConnection.js'
 const Router = express.Router()
 
 Router.get ("/", (req, res)=> {
-  const {user_name, user_password} = req.query 
   db.query ("SELECT * FROM questions",  (err,result)=> {
     if (err) {
       console.log ("Error in fetching questions", err)

@@ -17,7 +17,7 @@ Router.get ("/", (req, res)=> {
 
 Router.post('/', (req, res) => {
   const { question_id, user_id, answer_name } = req.body;
-  db.query("INSERT INTO Answers (question_id, user_id, answer_body) VALUES (?, ?, ?)",[question_id, user_id, answer_name]
+  db.query("INSERT INTO answers (question_id, user_id, answer_name) VALUES (?, ?, ?)",[question_id, user_id, answer_name]
   );
 });
 

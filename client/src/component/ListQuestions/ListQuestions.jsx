@@ -7,19 +7,19 @@ import Form from 'react-bootstrap/Form';
 export default function ListQuestions({user}) {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [answer_body, setAnswer_body] = useState ("")
+  const [answer_name, setAnswer_name] = useState ("")
 
   const handleSubmit = async (event, question_id) => {
 
     event.preventDefault();
-    const response = await axios.post ("http://localhost:3002/questions/", {question_id, user_id:user.user_id, answer_body})
+    const response = await axios.post ("http://localhost:3002/questions/", {question_id, user_id:user.user_id, answer_name})
   }
 
   const handleAnswerChange = (event) => {
-    setAnswer_body (event.target.value)
+    setAnswer_name (event.target.value)
   }
 
-  const fetchQuestion = async (question_id) => {
+  const fetchQuestion = async () => {
     try {
       const response = await axios.get ("http://localhost:3002/questions/")
       setQuestions (response.data)
@@ -54,24 +54,23 @@ export default function ListQuestions({user}) {
         return (
           <div key={index}>
             <div style={{"backgroundColor": "#d8d6d6", "padding": "20px"}} >
-              <label htmlFor=""><strong>Question: </strong>{question.name}</label>
+              <label htmlFor=""><strong>Who Was Thrasher Magazine's Skater of the Year in </strong>{question.name}</label>
             </div>
             <div>
               { answers.map ((answer,index) => {
                 return (
                   <>
                     {answers.map ((answer,index) => {
-                      <div>{answer.answer_body}</div>
+                      <div>{answer.answer_name}</div>
                     })}
                   </>
                 )
               })}
-              
-              
+            
             </div>
 
             <div style={{"backgroundColor": "#ffffff", "padding": "20px"}}>
-              <h4>Who was Skater of the Year in </h4>
+              <h4>{question.question_year}</h4>
               <Form.Control type="text" placeholder="Question Answer" onChange={handleAnswerChange} />
               <Button variant="warning" onClick={(event)=>handleSubmit(event, question.question_id)}>Submit</Button>
             </div>

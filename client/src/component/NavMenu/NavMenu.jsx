@@ -14,7 +14,7 @@ export default function NavMenu({user}) {
             
             <Nav.Link href="/login">Login</Nav.Link>
             <Nav.Link href="/signup">Sign up</Nav.Link>
-            <Nav.Link href="/questions">Questions</Nav.Link>
+            <Nav.Link href="/questions">Quiz</Nav.Link>
             
           </Nav>
         </Navbar.Collapse>

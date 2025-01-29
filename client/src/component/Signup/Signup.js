@@ -5,22 +5,22 @@ import axios from 'axios';
 
 export function Signup() {
   const [values, setValues] =useState({
-    name:'',
-    email:'',
-    password: '',
+    user_name:'',
+    user_email:'',
+    user_password: '',
 
 })
 const navigate = useNavigate();
 const [errors, setErrors] = useState({})
 const handleInput = (event) => {
-    setValues(prev => ({...prev, [event.target.name]: [event.target.value]}))
+    setValues(prev => ({...prev, [event.target.user_name]: [event.target.value]}))
 }
 
 const handleSubmit = (event) => {      
   event.preventDefault();        
   const err = Validation(values);  
   setErrors(err);         
-  if(err.name === "" && err.email === "" && err.password === "") 
+  if(err.user_name === "" && err.user_email === "" && err.user_password === "") 
     {            
       axios.post('http://localhost:3002/users', values)            
       .then(res => {                
@@ -39,19 +39,19 @@ return (
                 <label htmlFor= "name"><strong>Name</strong></label>
                 <input type="name" placeholder='Enter Name' name="name"
                 onChange={handleInput} className='form-control rounded-0'></input>
-                {errors.name && <span className= 'text-danger'>{errors.name}</span>}
+                {errors.user_name && <span className= 'text-danger'>{errors.user_name}</span>}
             </div>
             <div classname="mb-3">
                 <label htmlFor= "email"><strong>Email</strong></label>
                 <input type="email" placeholder='Enter Email' name="email"
                 onChange={handleInput} className='form-control rounded-0'></input>
-                {errors.email && <span className= 'text-danger'>{errors.email}</span>}
+                {errors.user_email && <span className= 'text-danger'>{errors.user_email}</span>}
             </div>
             <div classname="mb-3">
                 <label htmlFor= "password"><strong>Password</strong></label>
                 <input type="password" placeholder='Enter Password' name="password" 
                 onChange={handleInput} className='form-control rounded-0'></input>
-                {errors.password && <span className= 'text-danger'>{errors.password}</span>}
+                {errors.user_password && <span className= 'text-danger'>{errors.user_password}</span>}
             </div>
             <button type='submit' className='btn btn-success w-100 rounded-0'>Create Account</button>
             <p>By clicking the button, you agree to our terms and conditions.</p>

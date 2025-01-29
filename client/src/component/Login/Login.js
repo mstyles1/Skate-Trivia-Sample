@@ -10,7 +10,7 @@ export default function Login({user, setUser}) {
     })
   
     const handleInput = (event) => {
-      const name = event.target.name
+      const name = event.target.user_name
       const value = event.target.value
       setFormData ({...formData, [name]: value})
     }
@@ -28,7 +28,7 @@ export default function Login({user, setUser}) {
           if ( response.data.length > 0 ) {        
             setUser((prevUser) => {
               const DBuser = response.data[0]
-              const updatedUser = { ...prevUser, user_id: DBuser.user_id , user_name: DBuser.user_name};
+              const updatedUser = { ...prevUser, id: DBuser.id , user_name: DBuser.user_name};
               console.log("Updated user:", updatedUser); 
               return updatedUser;
             });

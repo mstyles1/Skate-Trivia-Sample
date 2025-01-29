@@ -6,7 +6,7 @@ const Router = express.Router()
 
 Router.get ("/", (req, res)=> {
   const {email, password} = req.query 
-  db.query ("SELECT * FROM users WHERE name= ? AND password = ?", [email, password],  (err,result)=> {
+  db.query ("SELECT * FROM users WHERE user_name= ? AND user_password = ?", [email, password],  (err,result)=> {
     if (err) {
       console.log ("Error in fetching user", err)
       res.status(500).send("error in the Query")

@@ -22,7 +22,7 @@ const handleSubmit = (event) => {
   setErrors(err);         
   if(err.name === "" && err.email === "" && err.password === "") 
     {            
-      axios.post('http://localhost:3002/signup', values)            
+      axios.post('http://localhost:3002/users', values)            
       .then(res => {                
         navigate('/');            
       })            

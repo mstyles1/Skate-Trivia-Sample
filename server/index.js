@@ -7,6 +7,7 @@ import answersRouts from './Routes/Answers.js'
 const app = express();
 app.use(express.json()); 
 
+app.use(cors({ origin: "http://localhost:3001" }))
 
 app.use ('/users', usersRouts);
 app.use ('/questions', questionsRouts)

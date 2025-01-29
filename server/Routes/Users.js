@@ -19,7 +19,7 @@ Router.get ("/", (req, res)=> {
 
 Router.post('/', (req, res) => {
   const { name, password } = req.body; 
-  db.query("INSERT INTO users (user_name, user_password) VALUES (?, ?)",[name, password],
+  db.query("INSERT INTO users (name,password) VALUES (?, ?)",[name, password],
            (err, result) => {
       if (err) res.status(500).send('Error adding user');
       else res.status(201).send('User added successfully');

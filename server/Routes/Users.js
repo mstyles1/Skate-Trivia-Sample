@@ -3,6 +3,28 @@ import db from '../dbConnection.js'
 
 const Router = express.Router()
 
+Router.post("/", (req, res) => {
+  const { user_email, user_password } = req.body;
+  
+  if (!user_email || !user_password) {
+    return res.status(400).json({ error: "Email and Password are required" });
+  }
+
+  db.query(
+    "INSERT INTO users (user_email, user_password) VALUES (?, ?)",
+    [user_email, user_password],
+    (err, result) => {
+      if (err) {
+        console.log("Error inserting user:", err);
+        return res.status(500).json({ error: "Database error" });
+      }
+      res.status(201).json({ message: "User created successfully", userId: result.insertId });
+    }
+  );
+});
+
+export default Router;
+
 Router.get ("/", (req, res)=> {
   const {user_email, user_password} = req.query 
   db.query ("SELECT * FROM users WHERE user_email= ? AND user_password = ?", [user_email, user_password],  (err,result)=> {
@@ -14,18 +36,3 @@ Router.get ("/", (req, res)=> {
       res.send (result)
   })
 })
-
-
-Router.post('/', (req, res) => {
-  const { user_email, user_password } = req.body; 
-  console.log("Received data:", user_email, user_password); // Debugging line
-
-  db.query("INSERT INTO users (user_email, user_password) VALUES (?, ?)",[user_email, user_password],
-           (err, result) => {
-      if (err) res.status(500).send('Error adding user');
-      else res.status(201).send('User added successfully');
-    }
-  );
-});
-
-export default Router;

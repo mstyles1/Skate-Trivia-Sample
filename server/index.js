@@ -20,6 +20,23 @@ app.get ('/', (req,res)=> {
   res.send ("The main server Running")
 })
 
+app.post("/users", (req, res) => {
+  const { user_email, user_password } = req.body;
+  
+db.query(
+  "INSERT INTO users (user_email, user_password) VALUES (?, ?)",
+  [user_email, user_password],
+  (err, result) => {
+    if (err) {
+      console.log("Error inserting user:", err);
+      return res.status(500).send("Error inserting user into DB");
+    }
+    console.log("User inserted successfully");
+    res.status(201).send("User created successfully");
+  }
+);
+});
+
 const port = process.env.PORT || 3002;
 
 app.listen (port, ()=>{

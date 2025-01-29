@@ -32,7 +32,8 @@ export default function Signup() {
     event.preventDefault();
     const err = Validation(values);
     setError(err);
-    if (err.user_email === "" && err.user_password === "") {
+  
+    if (Object.keys(err).length === 0) {
       axios.post('http://localhost:3002/users', values)
         .then(res => {
           console.log("Server Response", res);

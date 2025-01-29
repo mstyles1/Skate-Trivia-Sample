@@ -5,7 +5,6 @@ import axios from 'axios';
 
 export function Signup() {
   const [values, setValues] =useState({
-    user_name:'',
     user_email:'',
     user_password: '',
 
@@ -13,7 +12,7 @@ export function Signup() {
 const navigate = useNavigate();
 const [errors, setErrors] = useState({})
 const handleInput = (event) => {
-    setValues(prev => ({...prev, [event.target.user_name]: [event.target.value]}))
+    setValues(prev => ({...prev, [event.target.name]: [event.target.value]}))
 }
 
 const handleSubmit = (event) => {      
@@ -36,20 +35,14 @@ return (
         <h2>Signup</h2>
         <form action="signup" onSubmit={handleSubmit}>
             <div classname="mb-3">
-                <label htmlFor= "name"><strong>Name</strong></label>
-                <input type="name" placeholder='Enter Name' name="name"
-                onChange={handleInput} className='form-control rounded-0'></input>
-                {errors.user_name && <span className= 'text-danger'>{errors.user_name}</span>}
-            </div>
-            <div classname="mb-3">
                 <label htmlFor= "email"><strong>Email</strong></label>
-                <input type="email" placeholder='Enter Email' name="email"
+                <input type="email" placeholder='Enter Email' name="user_email"
                 onChange={handleInput} className='form-control rounded-0'></input>
                 {errors.user_email && <span className= 'text-danger'>{errors.user_email}</span>}
             </div>
             <div classname="mb-3">
                 <label htmlFor= "password"><strong>Password</strong></label>
-                <input type="password" placeholder='Enter Password' name="password" 
+                <input type="password" placeholder='Enter Password' name="user_password" 
                 onChange={handleInput} className='form-control rounded-0'></input>
                 {errors.user_password && <span className= 'text-danger'>{errors.user_password}</span>}
             </div>

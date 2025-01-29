@@ -5,8 +5,8 @@ import { check, validationResult} from 'express-validator'
 const Router = express.Router()
 
 Router.get ("/", (req, res)=> {
-  const {email, password} = req.query 
-  db.query ("SELECT * FROM users WHERE user_name= ? AND user_password = ?", [email, password],  (err,result)=> {
+  const {user_email, user_password} = req.query 
+  db.query ("SELECT * FROM users WHERE user_email= ? AND user_password = ?", [user_email, user_password],  (err,result)=> {
     if (err) {
       console.log ("Error in fetching user", err)
       res.status(500).send("error in the Query")
@@ -18,8 +18,8 @@ Router.get ("/", (req, res)=> {
 
 
 Router.post('/', (req, res) => {
-  const { name, password } = req.body; 
-  db.query("INSERT INTO users (name,password) VALUES (?, ?)",[name, password],
+  const { user_email, user_password } = req.body; 
+  db.query("INSERT INTO users (user_name, user_password) VALUES (?, ?)",[name, password],
            (err, result) => {
       if (err) res.status(500).send('Error adding user');
       else res.status(201).send('User added successfully');

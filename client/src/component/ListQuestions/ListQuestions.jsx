@@ -57,8 +57,7 @@ export default function ListQuestions({ user }) {
           <div key={index}>
             <div style={{ backgroundColor: "#d8d6d6", padding: "20px" }}>
               <label>
-                <strong>Who Was Thrasher Magazine's Skater of the Year in </strong>
-                {questions.question_year}
+                <strong>Who Was Thrasher Magazine's Skater of the Year In </strong>
               </label>
             </div>
             <div>

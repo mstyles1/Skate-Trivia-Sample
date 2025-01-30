@@ -23,7 +23,7 @@ Router.post('/', async (req, res) => {
 
   try {
     const [result] = await db.execute(
-      "INSERT INTO answers (question_id, question_year) VALUES (?, ?)",
+      "INSERT INTO questions (question_id, question_year) VALUES (?, ?)",
       [question_id, question_year]
     );
     res.status(201).send({ message: "Answer submitted successfully", answerId: result.insertId });

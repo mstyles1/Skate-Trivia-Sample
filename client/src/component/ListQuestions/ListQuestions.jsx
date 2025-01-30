@@ -6,7 +6,6 @@ import Form from 'react-bootstrap/Form';
 export default function ListQuestions({ user }) {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [question_year, setQuestionYear] = useState("");
   const [answerName, setAnswerName] = useState("");  // Add this line to define the answer_name state
 
   // Function to fetch questions
@@ -26,6 +25,7 @@ export default function ListQuestions({ user }) {
   // Function to handle form submit
   const handleSubmit = async (event, question_id) => {
     event.preventDefault();
+    console.log("Submitting question_id:", question_id);
 
     // Make sure question_id is available
     if (!question_id) {
@@ -45,10 +45,29 @@ export default function ListQuestions({ user }) {
   }
   };
 
-  // Handle answer change (year for this example)
-  const handleAnswerChange = (event) => {
-    setAnswerName(event.target.value); // Update the answer_name as the user types
+  const handleAnswerChange = (event, question_id) => {
+    const newAnswer = event.target.value;
+  
+    setAnswers(prev => {
+      const existingIndex = prev.findIndex(ans => ans.question_id === question_id);
+      
+      if (existingIndex !== -1) {
+        // Update existing answer
+        const updatedAnswers = [...prev];
+        updatedAnswers[existingIndex] = newAnswer;
+        return updatedAnswers;
+      } else {
+        // Add new answer
+        return [...prev, newAnswer];
+      }
+    });
   };
+  
+  <Form.Control
+    type="text"
+    placeholder="Question Answer"
+    onChange={(event) => handleAnswerChange(event, questions.question_id)}
+  />
 
   return (
     <>

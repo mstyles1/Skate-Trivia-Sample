@@ -11,9 +11,8 @@ Router.post("/", async (req, res) => {
   }
 
   try {
-    // Fetch the correct answer (using `is_correct`) from the database
     const [correctAnswerRows] = await db.execute(
-      "SELECT answer_name, is_correct FROM answers WHERE question_id = ?",
+      "SELECT answer_name FROM answers WHERE question_id = ? AND is_correct = 1",
       [question_id]
     );
 
@@ -24,8 +23,7 @@ Router.post("/", async (req, res) => {
     const correctAnswer = correctAnswerRows[0].answer_name;
     const isCorrect = correctAnswerRows[0].is_correct;
 
-    // Check if the submitted answer is correct
-    if (answer_name.toLowerCase() === correctAnswer.toLowerCase() && isCorrect) {
+    if (answer_name.toLowerCase() === correctAnswer.toLowerCase()) {
       return res.status(200).send({ message: "Correct!" });
     } else {
       return res.status(200).send({

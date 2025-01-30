@@ -6,7 +6,8 @@ import Form from 'react-bootstrap/Form';
 export default function ListQuestions({ user }) {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [answer_name, setAnswerName] = useState("");
+  const [question_year, setQuestionYear] = useState("");
+  const [answerName, setAnswerName] = useState("");  // Add this line to define the answer_name state
 
   // Function to fetch questions
   const fetchQuestions = async () => {
@@ -36,17 +37,17 @@ export default function ListQuestions({ user }) {
     try {
       const response = await axios.post("http://localhost:3002/answers/", {
         question_id,
-        answer_name,
+        answer_name: answerName,  // Pass answerName state here
       });
       console.log("Answer submitted successfully:", response.data);
     } catch (error) {
-      console.error("Error submitting answer:", error);
+      console.error("Error submitting answer:", error.response ? error.response.data : error.message);
     }
   };
 
   // Handle answer change (year for this example)
   const handleAnswerChange = (event) => {
-    setAnswerName(event.target.value); // Update the year as the answer
+    setAnswerName(event.target.value); // Update the answer_name as the user types
   };
 
   return (
@@ -63,7 +64,7 @@ export default function ListQuestions({ user }) {
             <div>
               <div>
                 {answers.map((answer, index) => (
-                  <div key={index}>{answers.answer_name}</div>
+                  <div key={index}>{answer.answer_name}</div>
                 ))}
               </div>
             </div>
@@ -73,15 +74,15 @@ export default function ListQuestions({ user }) {
               <Form.Control
                 type="text"
                 placeholder="Question Answer"
-                onChange={handleAnswerChange}
+                onChange={handleAnswerChange}  // Handle change and update state
               />
               <Button
-              variant="warning"
-              onClick={(event) => {
-                console.log("Question object:", questions); // Log the question object to check its structure
-                handleSubmit(event, questions.question_id);  // Ensure question_id is passed
-              }}>
-              Submit
+                variant="warning"
+                onClick={(event) => {
+                  console.log("Question object:", questions); // Log the question object to check its structure
+                  handleSubmit(event, questions.question_id);  // Ensure question_id is passed
+                }}>
+                Submit
               </Button>
             </div>
           </div>

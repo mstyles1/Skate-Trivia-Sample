@@ -15,9 +15,9 @@ Router.get("/", async (req, res) => {
 
 
 Router.post('/', async (req, res) => {
-  const { question_id, user_id, answer_name } = req.body;
+  const { question_id, user_email, answer_name } = req.body;
 
-  if (!question_id || !user_id || !answer_name) {
+  if (!question_id || !user_email || !answer_name) {
     return res.status(400).send("All fields (question_id, user_id, answer_name) are required.");
   }
 

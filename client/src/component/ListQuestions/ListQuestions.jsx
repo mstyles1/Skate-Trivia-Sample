@@ -7,39 +7,40 @@ import Form from 'react-bootstrap/Form';
 export default function ListQuestions({user}) {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [answer_name, setAnswer_name] = useState ("")
+  const [question_year, setQuestionYear] = useState ("")
 
   const handleSubmit = async (event, question_id) => {
 
     event.preventDefault();
-    const response = await axios.post ("http://localhost:3002/questions/", {question_id, user_id:user.user_id, answer_name})
+    const response = await axios.post ("http://localhost:3002/questions/", {question_id, question_year})
+    console.log ("response: ", response)
   }
 
   const handleAnswerChange = (event) => {
-    setAnswer_name (event.target.value)
+    setQuestionYear (event.target.value)
   }
 
   const fetchQuestion = async () => {
     try {
-      const response = await axios.get("http://localhost:3002/questions/");
-      console.log("Fetched questions:", response.data); // Log the response here
-      setQuestions(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchAnswer = async (question_id) => {
-    try {
-      const response = await axios.get (`http://localhost:3002/answers?${question_id}`)
-      setAnswers ((prevAnswer)=>({...prevAnswer, [question_id]: response.data}))
-      console.log (answers)
+      const response = await axios.get ("http://localhost:3002/questions/")
+      setQuestions (response.data)
     }
     catch (error) {
       console.log (error)
     }
-}
+  }
 
+  const fetchAnswers = async (question_id) => {
+    try {
+      const response = await axios.get("http://localhost:3002/answers", {
+        params: { question_id }
+      });
+      setAnswers((prevAnswer) => ({ ...prevAnswer, [question_id]: response.data }));
+      console.log(answers);
+    } catch (error) {
+      console.log(error);
+    }
+}
   useEffect (()=>{
     fetchQuestion()
   },[])
@@ -67,7 +68,7 @@ export default function ListQuestions({user}) {
 
             <div style={{"backgroundColor": "#ffffff", "padding": "20px"}}>
               <h4>{question.question_year}</h4>
-              <Form.Control type="text" placeholder="Question Answer" onChange={fetchAnswer} />
+              <Form.Control type="text" placeholder="Question Answer" onChange={fetchAnswers} />
               <Button variant="warning" onClick={(event)=>handleSubmit(event, question.question_id)}>Submit</Button>
             </div>
           </div>                   

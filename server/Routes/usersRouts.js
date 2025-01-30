@@ -24,7 +24,7 @@ Router.post("/", async (req, res) => {
 
 Router.get("/", async (req, res) => {
   try {
-    const [rows] = await db.execute("SELECT * FROM questions");
+    const [rows] = await db.execute("SELECT * FROM users");
     res.send(rows); // Send questions to the client
   } catch (err) {
     console.log("Error in fetching questions", err);

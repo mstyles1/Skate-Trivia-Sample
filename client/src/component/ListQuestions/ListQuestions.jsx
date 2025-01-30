@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 export default function ListQuestions({ user }) {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [question_year, setQuestionYear] = useState("");
+  const [answer_name, setAnswerName] = useState("");
 
   // Function to fetch questions
   const fetchQuestions = async () => {
@@ -36,7 +36,7 @@ export default function ListQuestions({ user }) {
     try {
       const response = await axios.post("http://localhost:3002/answers/", {
         question_id,
-        question_year,
+        answer_name,
       });
       console.log("Answer submitted successfully:", response.data);
     } catch (error) {
@@ -46,7 +46,7 @@ export default function ListQuestions({ user }) {
 
   // Handle answer change (year for this example)
   const handleAnswerChange = (event) => {
-    setQuestionYear(event.target.value); // Update the year as the answer
+    setAnswerName(event.target.value); // Update the year as the answer
   };
 
   return (
@@ -63,7 +63,7 @@ export default function ListQuestions({ user }) {
             <div>
               <div>
                 {answers.map((answer, index) => (
-                  <div key={index}>{answer.answer_name}</div>
+                  <div key={index}>{answers.answer_name}</div>
                 ))}
               </div>
             </div>

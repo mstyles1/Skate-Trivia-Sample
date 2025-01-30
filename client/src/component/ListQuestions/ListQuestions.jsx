@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 
 export default function ListQuestions({ user }) {
   const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState([]);
-  const [answerName, setAnswerName] = useState("");  // Add this line to define the answer_name state
+  const [answers, setAnswers] = useState({});
+  const [flipped, setFlipped] = useState({}); // State to track flipped questions
 
   // Function to fetch questions
   const fetchQuestions = async () => {
@@ -22,56 +21,19 @@ export default function ListQuestions({ user }) {
     fetchQuestions(); // Fetch questions when component mounts
   }, []);
 
-  // Function to handle form submit
-  const handleSubmit = async (event, question_id) => {
-    event.preventDefault();
-    console.log("Submitting question_id:", question_id);
-
-    // Make sure question_id is available
-    if (!question_id) {
-      console.error("question_id is missing");
-      return;
-    }
-
-    // Send the request to submit the answer
-    try {
-      const response = await axios.post("http://localhost:3002/answers/", {
-        question_id,
-        answer_name: answerName,  // Pass answerName state here
-      });
-      console.log("Answer submitted successfully:", response.data);
-    } catch (error) {
-      console.error("Error submitting answer:", error.response ? error.response.data : error.message);
-  }
+  // Function to toggle question visibility
+  const toggleAnswer = (question_id) => {
+    setFlipped((prev) => ({
+      ...prev,
+      [question_id]: !prev[question_id], // Toggle the flipped state for the specific question
+    }));
   };
-
-  const handleAnswerChange = (event, question_id) => {
-    const newAnswer = event.target.value;
-  
-    setAnswers(prev => {
-      const existingIndex = prev.findIndex(ans => ans.question_id === question_id);
-      
-      if (existingIndex !== -1) {
-        // Update existing answer
-        const updatedAnswers = [...prev];
-        updatedAnswers[existingIndex] = newAnswer;
-        return updatedAnswers;
-      } else {
-        // Add new answer
-        return [...prev, newAnswer];
-      }
-    });
-  };
-  
-  <Form.Control
-    type="text"
-    placeholder="Question Answer"
-    onChange={(event) => handleAnswerChange(event, questions.question_id)}
-  />
 
   return (
     <>
-      {questions.map((questions, index) => {
+      {questions.map((question, index) => {
+        const isFlipped = flipped[question.question_id]; // Check if the question is flipped
+
         return (
           <div key={index}>
             <div style={{ backgroundColor: "#d8d6d6", padding: "20px" }}>
@@ -79,29 +41,23 @@ export default function ListQuestions({ user }) {
                 <strong>Who Was Thrasher Magazine's Skater of the Year In </strong>
               </label>
             </div>
-            <div>
-              <div>
-                {answers.map((answer, index) => (
-                  <div key={index}>{answer.answer_name}</div>
-                ))}
-              </div>
-            </div>
-
             <div style={{ backgroundColor: "#ffffff", padding: "20px" }}>
-              <h4>{questions.question_year}</h4>
-              <Form.Control
-                type="text"
-                placeholder="Question Answer"
-                onChange={handleAnswerChange}  // Handle change and update state
-              />
-              <Button
-                variant="warning"
-                onClick={(event) => {
-                  console.log("Question object:", questions); // Log the question object to check its structure
-                  handleSubmit(event, questions.question_id);  // Ensure question_id is passed
-                }}>
-                Submit
+              <h4>{question.question_year}</h4>
+              <Button 
+                variant="info"
+                onClick={() => toggleAnswer(question.question_id)} // Toggle the visibility
+              >
+                {isFlipped ? 'Hide Answer' : 'Show Answer'}
               </Button>
+
+              {isFlipped && (
+                <div style={{ marginTop: '20px' }}>
+                  {/* Display the answer if the question is flipped */}
+                  <p>
+                    Answer: {answers[question.question_id] || 'No answer available'}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         );

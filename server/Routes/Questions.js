@@ -15,16 +15,16 @@ Router.get("/", async (req, res) => {
 
 
 Router.post('/', async (req, res) => {
-  const { question_id, user_email, answer_name } = req.body;
+  const { question_id, question_year } = req.body;
 
-  if (!question_id || !user_email || !answer_name) {
-    return res.status(400).send("All fields (question_id, user_id, answer_name) are required.");
+  if (!question_id || !question_year) {
+    return res.status(400).send("All fields (question_id, question_year) are required.");
   }
 
   try {
     const [result] = await db.execute(
-      "INSERT INTO answers (question_id, user_id, answer_name) VALUES (?, ?, ?)",
-      [question_id, user_id, answer_name]
+      "INSERT INTO answers (question_id, question_year) VALUES (?, ?)",
+      [question_id, question_year]
     );
     res.status(201).send({ message: "Answer submitted successfully", answerId: result.insertId });
   } catch (err) {

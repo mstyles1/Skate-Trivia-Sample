@@ -21,13 +21,13 @@ export default function ListQuestions({user}) {
 
   const fetchQuestion = async () => {
     try {
-      const response = await axios.get ("http://localhost:3002/questions/")
-      setQuestions (response.data)
+      const response = await axios.get("http://localhost:3002/questions/");
+      console.log("Fetched questions:", response.data); // Log the response here
+      setQuestions(response.data);
+    } catch (error) {
+      console.log(error);
     }
-    catch (error) {
-      console.log (error)
-    }
-  }
+  };
 
   const fetchAnswer = async (question_id) => {
     try {

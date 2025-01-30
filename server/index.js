@@ -25,3 +25,11 @@ const port = process.env.PORT || 3002;
 app.listen (port, ()=>{
   console.log ("Server runnning on port", port)
 })
+
+process.on('SIGINT', () => {
+  console.log('Shutting down server...');
+  pool.end(() => {
+      console.log('Closed MySQL connection pool');
+      process.exit(0);
+  });
+});

@@ -55,7 +55,7 @@ export default function Login({ user, setUser }) {
         <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
             <div className="bg-white p-3 rounded w-25">
                 <h2>Login</h2>
-                <form action="login" onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     {error && <div className="alert alert-danger">{error}</div>}
 
                     <div className="mb-3">

@@ -49,7 +49,7 @@ export default function Signup() {
     <div className="d-flex justify-content-center align-items-center bg-primary vh-100">
       <div className="bg-white p-3 rounded w-25">
         <h2>Signup</h2>
-        <form action="signup" onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           {error && error.user_email && <div className="alert alert-danger">{error.user_email}</div>}
           {error && error.user_password && <div className="alert alert-danger">{error.user_password}</div>}
           <div className="mb-3">

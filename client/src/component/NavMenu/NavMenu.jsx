@@ -18,7 +18,6 @@ export default function NavMenu({user}) {
             
           </Nav>
         </Navbar.Collapse>
-        <div> Welcome, {user.user_name}</div>
       </Container>
     </Navbar>
   )

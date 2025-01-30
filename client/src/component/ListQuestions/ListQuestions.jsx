@@ -2,28 +2,39 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 
-export default function ListQuestions({ user }) {
+export default function ListQuestions() {
   const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState({}); // Store answers by question_id
   const [flipped, setFlipped] = useState({}); // State to track flipped questions
 
-  // Function to fetch questions
+  // Fetch questions from the database
   const fetchQuestions = async () => {
     try {
       const response = await axios.get("http://localhost:3002/questions/");
-      setQuestions(response.data); // Set questions array in state
+      setQuestions(response.data); // Set questions in state
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching questions:", error);
     }
   };
 
+  const fetchAnswers = async () => {
+    try {
+      const response = await axios.get("http://localhost:3002/answers");
+      setAnswers(response.data); // Store the fetched answers
+    } catch (error) {
+      console.error("Error fetching answers:", error);
+    }
+  };
+
+  // Use effect to load questions and answers
   useEffect(() => {
-    fetchQuestions(); // Fetch questions when component mounts
+    fetchQuestions(); // Fetch questions when the component mounts
+    fetchAnswers();   // Fetch answers when the component mounts
   }, []);
 
-  // Function to toggle question visibility
+  // Toggle answer visibility
   const toggleAnswer = (question_id) => {
-    setFlipped((prev) => ({
+    setFlipped(prev => ({
       ...prev,
       [question_id]: !prev[question_id], // Toggle the flipped state for the specific question
     }));
@@ -52,9 +63,9 @@ export default function ListQuestions({ user }) {
 
               {isFlipped && (
                 <div style={{ marginTop: '20px' }}>
-                  {/* Display the answer if the question is flipped */}
+                  {/* Display the answers if the question is flipped */}
                   <p>
-                    Answer: {answers[question.question_id] || 'No answer available'}
+                    Answers: {answers[question.question_id] ? answers[question.question_id].join(', ') : 'No answer available'}
                   </p>
                 </div>
               )}

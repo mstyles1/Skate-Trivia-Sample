@@ -42,7 +42,7 @@ export default function ListQuestions({ user }) {
       console.log("Answer submitted successfully:", response.data);
     } catch (error) {
       console.error("Error submitting answer:", error.response ? error.response.data : error.message);
-    }
+  }
   };
 
   // Handle answer change (year for this example)

@@ -23,17 +23,12 @@ Router.post("/", async (req, res) => {
 });
 
 Router.get("/", async (req, res) => {
-  const { user_email, user_password } = req.query;
-
   try {
-    const [result] = await db.execute(
-      "SELECT * FROM users WHERE user_email = ? AND user_password = ?",
-      [user_email, user_password]
-    );
-    res.send(result);
+    const [rows] = await db.execute("SELECT * FROM questions");
+    res.send(rows); // Send questions to the client
   } catch (err) {
-    console.log("Error in fetching user:", err);
-    res.status(500).send("Error in the Query");
+    console.log("Error in fetching questions", err);
+    return res.status(500).send("Error in the Query");
   }
 });
 

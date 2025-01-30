@@ -45,6 +45,12 @@ export default function ListQuestions({user}) {
     fetchQuestion()
   },[])
 
+  useEffect(() => {
+    if (questions.question_id) {
+      fetchAnswers(questions.question_id);
+    }
+  }, [questions.question_id]);
+
   return (
     <>
       { questions.map ((question, index)=> {
@@ -54,21 +60,24 @@ export default function ListQuestions({user}) {
               <label htmlFor=""><strong>Who Was Thrasher Magazine's Skater of the Year in </strong>{question.name}</label>
             </div>
             <div>
-              { answers.map ((answer,index) => {
-                return (
-                  <>
-                    {answers.map ((answer,index) => {
-                      <div>{answer.answer_name}</div>
-                    })}
-                  </>
-                )
-              })}
+            <div>
+  {answers.map((answer, index) => {
+    return (
+      <div key={index}>
+        {answer.answer_name} 
+      </div>
+    );
+  })}
+</div>
             
             </div>
 
             <div style={{"backgroundColor": "#ffffff", "padding": "20px"}}>
               <h4>{question.question_year}</h4>
-              <Form.Control type="text" placeholder="Question Answer" onChange={fetchAnswers} />
+              <Form.Control 
+                type="text" 
+                placeholder="Question Answer" 
+                onChange={handleAnswerChange}/>
               <Button variant="warning" onClick={(event)=>handleSubmit(event, question.question_id)}>Submit</Button>
             </div>
           </div>                   

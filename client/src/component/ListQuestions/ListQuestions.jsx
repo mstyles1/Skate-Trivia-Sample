@@ -87,18 +87,26 @@ export default function ListQuestions() {
   // Handle adding a new answer
   const handleAddAnswer = async () => {
     if (selectedQuestionId && newAnswer) {
+      // Check if an answer already exists for the selected question
+      if (answers[selectedQuestionId] && answers[selectedQuestionId].length > 0) {
+        setErrorMessage("An answer already exists for this question.");
+        return; // Stop execution if there's already an answer for the selected question
+      }
+  
       try {
+        // Proceed to add the answer
         await axios.post("http://localhost:3002/answers", { question_id: selectedQuestionId, answer_name: newAnswer });
         setAnswers(prev => ({
           ...prev,
           [selectedQuestionId]: [...(prev[selectedQuestionId] || []), newAnswer]
         }));
         setNewAnswer(""); // Reset input field
+        setErrorMessage(""); // Clear previous error
       } catch (error) {
         console.error("Error adding answer:", error);
       }
     } else {
-      console.error("Please select a question and enter an answer.");
+      setErrorMessage("Please select a question and enter an answer.");
     }
   };
 
@@ -153,23 +161,26 @@ export default function ListQuestions() {
 
       {/* Form to add new answer */}
       <div>
-        <h4>Add an Answer</h4>
-        <select onChange={(e) => setSelectedQuestionId(e.target.value)} value={selectedQuestionId}>
-          <option value={null}>Select a question</option>
-          {questions.map(question => (
-            <option key={question.question_id} value={question.question_id}>
-              {question.question_year}
-            </option>
-          ))}
-        </select>
-        <input 
-          type="text" 
-          value={newAnswer} 
-          onChange={(e) => setNewAnswer(e.target.value)} 
-          placeholder="Enter Answer"
-        />
-        <button onClick={handleAddAnswer}>Add Answer</button>
-      </div>
+  <h4>Add an Answer</h4>
+  <select onChange={(e) => setSelectedQuestionId(e.target.value)} value={selectedQuestionId}>
+    <option value={null}>Select a question</option>
+    {questions.map(question => (
+      <option key={question.question_id} value={question.question_id}>
+        {question.question_year}
+      </option>
+    ))}
+  </select>
+  <input 
+    type="text" 
+    value={newAnswer} 
+    onChange={(e) => setNewAnswer(e.target.value)} 
+    placeholder="Enter Answer"
+  />
+  <button onClick={handleAddAnswer}>Add Answer</button>
+  
+  {/* Display the error message */}
+  {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+    </div>
     </div>
   );
 }

@@ -6,6 +6,8 @@ export default function ListQuestions() {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({}); // Store answers by question_id
   const [flipped, setFlipped] = useState({}); // State to track flipped questions
+  const [errorMessage, setErrorMessage] = useState(""); // To store error messages
+
   
   // State to manage adding a new question
   const [newQuestionYear, setNewQuestionYear] = useState("");
@@ -63,16 +65,24 @@ export default function ListQuestions() {
   // Handle adding a new question
   const handleAddQuestion = async () => {
     try {
-      const response = await axios.post("http://localhost:3002/questions", { question_year: newQuestionYear });
-      setQuestions(prevQuestions => [
-        ...prevQuestions, 
-        { question_year: newQuestionYear, question_id: response.data.questionId }
-      ]);
-      setNewQuestionYear(""); // Reset input field
+        const response = await axios.post("http://localhost:3002/questions", { question_year: newQuestionYear });
+
+        // If the question is added successfully, update the state
+        setQuestions(prevQuestions => [
+            ...prevQuestions, 
+            { question_year: newQuestionYear, question_id: response.data.questionId }
+        ]);
+        setNewQuestionYear(""); // Reset input field
+        setErrorMessage(""); // Clear previous error
     } catch (error) {
-      console.error("Error adding question:", error);
+        if (error.response && error.response.status === 400) {
+            // Handle the case when the year already exists
+            setErrorMessage(error.response.data); // Set the error message from the server response
+        } else {
+            setErrorMessage("An unexpected error occurred. Please try again.");
+        }
     }
-  };
+};
 
   // Handle adding a new answer
   const handleAddAnswer = async () => {
@@ -138,6 +148,7 @@ export default function ListQuestions() {
           placeholder="Enter Year"
         />
         <button onClick={handleAddQuestion}>Add Question</button>
+        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
       </div>
 
       {/* Form to add new answer */}

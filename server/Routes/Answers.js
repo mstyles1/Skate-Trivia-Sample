@@ -5,9 +5,9 @@ const Router = express.Router();
 Router.get("/", async (req, res) => {
   try {
     const [rows] = await db.execute(`
-      SELECT a.answer_id, q.question_year, a.answer_name
+      SELECT a.answer_id, q.question_id, a.answer_name
 FROM answers a
-JOIN questions q ON a.question_year = q.question_year
+JOIN questions q ON a.question_id = q.question_id
     `);
     res.send(rows); // Send answers along with their question IDs
   } catch (err) {

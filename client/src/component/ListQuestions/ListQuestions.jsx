@@ -4,7 +4,7 @@
 
   export default function ListQuestions() {
     const [questions, setQuestions] = useState([]);
-    const [answers, setAnswers] = useState({}); // Store answers by question_year
+    const [answers, setAnswers] = useState({}); // Store answers by question_id
     const [flipped, setFlipped] = useState({}); // State to track flipped questions
 
     // Fetch questions from the database
@@ -22,12 +22,12 @@
           const response = await axios.get("http://localhost:3002/answers");
           const answersByQuestion = {};
   
-          // Organize answers by question_year
+          // Organize answers by question_id
           response.data.forEach(answer => {
-              if (!answersByQuestion[answer.question_year]) {
-                  answersByQuestion[answer.question_year] = [];
+              if (!answersByQuestion[answer.question_id]) {
+                  answersByQuestion[answer.question_id] = [];
               }
-              answersByQuestion[answer.question_year].push(answer.answer_name);
+              answersByQuestion[answer.question_id].push(answer.answer_name);
           });
   
           console.log("Answers grouped by year:", answersByQuestion); // Debugging log
@@ -44,13 +44,12 @@
       fetchAnswers();   // Fetch answers when the component mounts
     }, []);
 
-    // Toggle answer visibility
-    const toggleAnswer = (question_year) => {
+    const toggleAnswer = (question_id) => {
       setFlipped(prev => ({
         ...prev,
-        [question_year]: !prev[question_year], // Toggle the flipped state for the specific question
+        [question_id]: !prev[question_id], // Toggle the flipped state for the specific question using question_id
       }));
-    };
+   };
 
     return (
       <>
@@ -67,17 +66,17 @@
                     <div style={{ backgroundColor: "#ffffff", padding: "20px" }}>
                         <h4>{question.question_year}</h4>
                         <Button 
-                            variant="info"
-                            onClick={() => toggleAnswer(question.question_year)} // Toggle the visibility
+                          variant="info"
+                          onClick={() => toggleAnswer(question.question_id)} 
                         >
-                            {isFlipped ? 'Hide Answer' : 'Show Answer'}
+                          {isFlipped ? 'Hide Answer' : 'Show Answer'}
                         </Button>
     
                         {isFlipped && (
                             <div style={{ marginTop: '20px' }}>
                                 {/* Display the answers if the question is flipped */}
                                 <p>
-                                    Answers: {answers[question.question_year] ? answers[question.question_year].join(', ') : 'No answer available'}
+                                    Answer: {answers[question.question_id] ? answers[question.question_id].join(', ') : 'No answer available'}
                                 </p>
                             </div>
                         )}

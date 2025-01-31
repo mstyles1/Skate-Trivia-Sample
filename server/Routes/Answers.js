@@ -34,5 +34,16 @@ Router.post("/", async (req, res) => {
     return res.status(500).send("Error inserting answer");
   }
 });
+Router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await db.execute('DELETE FROM answers WHERE answer_id = ?', [id]);
+    res.status(200).send({ message: 'Answer deleted successfully' });
+  } catch (err) {
+    console.log('Error deleting answer:', err);
+    res.status(500).send('Error deleting answer');
+  }
+});
 
 export default Router;

@@ -8,7 +8,6 @@ export default function ListQuestions() {
   const [flipped, setFlipped] = useState({}); // State to track flipped questions
   const [errorMessage, setErrorMessage] = useState(""); // To store error messages
 
-  
   // State to manage adding a new question
   const [newQuestionYear, setNewQuestionYear] = useState("");
 
@@ -65,24 +64,24 @@ export default function ListQuestions() {
   // Handle adding a new question
   const handleAddQuestion = async () => {
     try {
-        const response = await axios.post("http://localhost:3002/questions", { question_year: newQuestionYear });
+      const response = await axios.post("http://localhost:3002/questions", { question_year: newQuestionYear });
 
-        // If the question is added successfully, update the state
-        setQuestions(prevQuestions => [
-            ...prevQuestions, 
-            { question_year: newQuestionYear, question_id: response.data.questionId }
-        ]);
-        setNewQuestionYear(""); // Reset input field
-        setErrorMessage(""); // Clear previous error
+      // If the question is added successfully, update the state
+      setQuestions(prevQuestions => [
+        ...prevQuestions, 
+        { question_year: newQuestionYear, question_id: response.data.questionId }
+      ]);
+      setNewQuestionYear(""); // Reset input field
+      setErrorMessage(""); // Clear previous error
     } catch (error) {
-        if (error.response && error.response.status === 400) {
-            // Handle the case when the year already exists
-            setErrorMessage(error.response.data); // Set the error message from the server response
-        } else {
-            setErrorMessage("An unexpected error occurred. Please try again.");
-        }
+      if (error.response && error.response.status === 400) {
+        // Handle the case when the year already exists
+        setErrorMessage(error.response.data); // Set the error message from the server response
+      } else {
+        setErrorMessage("An unexpected error occurred. Please try again.");
+      }
     }
-};
+  };
 
   // Handle adding a new answer
   const handleAddAnswer = async () => {
@@ -107,6 +106,16 @@ export default function ListQuestions() {
       }
     } else {
       setErrorMessage("Please select a question and enter an answer.");
+    }
+  };
+
+  // Handle deleting a question
+  const handleDeleteQuestion = async (questionId) => {
+    try {
+      await axios.delete(`http://localhost:3002/questions/${questionId}`);
+      setQuestions(prevQuestions => prevQuestions.filter(q => q.question_id !== questionId));
+    } catch (error) {
+      console.error("Error deleting question:", error);
     }
   };
 
@@ -141,6 +150,15 @@ export default function ListQuestions() {
                   </p>
                 </div>
               )}
+
+              {/* Delete button below Show Answer */}
+              <Button
+                variant="danger"
+                onClick={() => handleDeleteQuestion(question.question_id)}
+                style={{ marginTop: '10px' }}
+              >
+                Delete Question
+              </Button>
             </div>
           </div>
         );
@@ -161,26 +179,26 @@ export default function ListQuestions() {
 
       {/* Form to add new answer */}
       <div>
-  <h4>Add an Answer</h4>
-  <select onChange={(e) => setSelectedQuestionId(e.target.value)} value={selectedQuestionId}>
-    <option value={null}>Select a question</option>
-    {questions.map(question => (
-      <option key={question.question_id} value={question.question_id}>
-        {question.question_year}
-      </option>
-    ))}
-  </select>
-  <input 
-    type="text" 
-    value={newAnswer} 
-    onChange={(e) => setNewAnswer(e.target.value)} 
-    placeholder="Enter Answer"
-  />
-  <button onClick={handleAddAnswer}>Add Answer</button>
-  
-  {/* Display the error message */}
-  {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-    </div>
+        <h4>Add an Answer</h4>
+        <select onChange={(e) => setSelectedQuestionId(e.target.value)} value={selectedQuestionId}>
+          <option value={null}>Select a question</option>
+          {questions.map(question => (
+            <option key={question.question_id} value={question.question_id}>
+              {question.question_year}
+            </option>
+          ))}
+        </select>
+        <input 
+          type="text" 
+          value={newAnswer} 
+          onChange={(e) => setNewAnswer(e.target.value)} 
+          placeholder="Enter Answer"
+        />
+        <button onClick={handleAddAnswer}>Add Answer</button>
+        
+        {/* Display the error message */}
+        {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+      </div>
     </div>
   );
 }

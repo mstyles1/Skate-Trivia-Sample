@@ -44,4 +44,22 @@ Router.post('/', async (req, res) => {
   }
 });
 
+
+Router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Delete answers associated with the question first
+    await db.execute('DELETE FROM answers WHERE question_id = ?', [id]);
+
+    // Then delete the question
+    await db.execute('DELETE FROM questions WHERE question_id = ?', [id]);
+
+    res.status(200).send({ message: 'Question deleted successfully' });
+  } catch (err) {
+    console.log('Error deleting question:', err);
+    res.status(500).send('Error deleting question');
+  }
+});
+
 export default Router;

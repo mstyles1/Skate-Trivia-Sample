@@ -4,7 +4,7 @@ import db from '../dbConnection.js';
 const Router = express.Router();
 
 Router.post("/", async (req, res) => {
-  const { user_email, user_password } = req.query;
+  const { user_email, user_password } = req.body;
 
   if (!user_email || !user_password) {
     return res.status(400).json({ error: "Email and Password are required" });

@@ -34,7 +34,7 @@ export default function Signup() {
     setError(err);
   
     if (Object.keys(err).length === 0) {
-      axios.post('http://localhost:3002/users', values)
+      axios.post('http://localhost:3002/users/signup', values)
         .then(res => {
           console.log("Server Response", res);
           navigate('/');

@@ -18,32 +18,32 @@ export default function Login({ user, setUser }) {
     };
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-      
-        if (!formData.user_email || !formData.user_password) {
-          setError("Both fields are required.");
-          return;
+      event.preventDefault();
+    
+      if (!formData.user_email || !formData.user_password) {
+        setError("Both fields are required.");
+        return;
+      }
+      setError("");
+  
+      try {
+        const response = await axios.post("http://localhost:3002/users/", formData);
+  
+        if (response.data.length > 0) {
+          const DBuser = response.data[0];
+  
+          //Correct place to set user
+          setUser({ id: DBuser.id, user_email: DBuser.user_email });
+  
+          console.log("User logged in:", DBuser);
+        } else {
+          setError("Invalid credentials. Please try again.");
         }
-        setError("");
-      
-        try {
-          const response = await axios.post("http://localhost:3002/users/", formData);
-      
-          if (response.data.length > 0) {
-            setUser((prevUser) => {
-              const DBuser = response.data[0];
-              const updatedUser = { ...prevUser, id: DBuser.id, user_email: DBuser.user_email };
-              console.log("Updated user:", updatedUser);
-              return updatedUser;
-            });
-          } else {
-            setError("Invalid credentials. Please try again.");
-          }
-        } catch (error) {
-          console.log(error);
-          setError("Something went wrong, please try again.");
-        }
-      };
+      } catch (error) {
+        console.log(error);
+        setError("Something went wrong, please try again.");
+      }
+  };
 
     return (
         <div className="d-flex justify-content-center align-items-center bg-primary vh-100">

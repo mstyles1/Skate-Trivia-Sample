@@ -28,20 +28,23 @@ export default function Signup() {
     return errors;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const err = Validation(values);
     setError(err);
   
     if (Object.keys(err).length === 0) {
-      axios.post('http://localhost:3002/users/signup', values)
-        .then(res => {
-          console.log("Server Response", res);
-          navigate('/');
-        })
-        .catch(err => {
-          console.error("error response:", err);
-        });
+      try {
+        const res = await axios.post('http://localhost:3002/users/signup', values);
+  
+        if (res.status === 201) {
+          console.log("User created successfully");
+          navigate('/', { state: { successMessage: "Success! Click 'Log in' to continue." } });
+        }
+      } catch (error) {
+        console.error("Signup error:", error);
+        setError({ general: error.response?.data?.error || "An error occurred" });
+      }
     }
   };
 
@@ -77,7 +80,7 @@ export default function Signup() {
             />
           </div>
           <button type="submit" className="btn btn-success w-100">Create Account</button>
-          <Link to="/signup" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">
+          <Link to="/" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">
             Log in
           </Link>
         </form>

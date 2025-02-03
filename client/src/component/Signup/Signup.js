@@ -39,7 +39,7 @@ export default function Signup() {
   
         if (res.status === 201) {
           console.log("User created successfully");
-          navigate('/', { state: { successMessage: "Success! Click 'Log in' to continue." } });
+          navigate('/', { state: { successMessage: "Success!" } });
         }
       } catch (error) {
         console.error("Signup error:", error);
@@ -81,7 +81,7 @@ export default function Signup() {
           </div>
           <button type="submit" className="btn btn-success w-100">Create Account</button>
           <Link to="/" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">
-            Log in
+           Log In
           </Link>
         </form>
       </div>

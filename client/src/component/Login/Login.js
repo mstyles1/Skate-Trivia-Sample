@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Login({ user, setUser }) {
     const location = useLocation();
+    const navigate = useNavigate();
     const successMessage = location.state?.successMessage || ""; // Get success message if it exists
 
     const [formData, setFormData] = useState({
@@ -13,6 +14,16 @@ export default function Login({ user, setUser }) {
     });
 
     const [error, setError] = useState("");
+
+    // Clear success message when component is mounted
+    useEffect(() => {
+        if (successMessage) {
+            // Delay the clearing of the success message to ensure it's shown once
+            setTimeout(() => {
+                navigate('/', { replace: true }); // Navigate to home or login without message
+            }, 3000); // Adjust delay time as needed (e.g., 3 seconds)
+        }
+    }, [successMessage, navigate]);
 
     const handleInput = (event) => {
         const { name, value } = event.target;
